@@ -18,5 +18,10 @@ public class JsonBackedFoodGuideTest {
 
         assertThat(foodGuide).isNotNull();
     }
+    
+    @Test
+    public void test(){
+        assertThat(false).isTrue();
+    }
 
 }
