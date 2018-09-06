@@ -10,13 +10,19 @@ buildscript {
     }
 }
 
-version "0.1"
+plugins {
+    id 'jacoco'
+    id 'com.github.kt3k.coveralls' version '2.6.3'
+}
+
+version "1.0.0"
 group "signal"
 
 apply plugin:"io.spring.dependency-management"
 apply plugin:"com.github.johnrengelman.shadow"
 apply plugin:"application"
 apply plugin:"java"
+apply plugin:"jacoco"
 apply plugin:"net.ltgt.apt-eclipse"
 apply plugin:"net.ltgt.apt-idea"
 
@@ -51,6 +57,13 @@ dependencies {
 
 shadowJar {
     mergeServiceFiles()
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true // coveralls plugin depends on xml format report
+        html.enabled = true
+    }
 }
 
 run.jvmArgs('-noverify', '-XX:TieredStopAtLevel=1')
