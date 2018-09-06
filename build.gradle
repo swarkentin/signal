@@ -20,6 +20,18 @@ apply plugin:"java"
 apply plugin:"net.ltgt.apt-eclipse"
 apply plugin:"net.ltgt.apt-idea"
 
+plugins {
+    id 'jacoco'
+    id 'com.github.kt3k.coveralls' version '2.6.3'
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true // coveralls plugin depends on xml format report
+        html.enabled = true
+    }
+}
+
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
