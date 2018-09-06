@@ -10,18 +10,9 @@ buildscript {
     }
 }
 
-// Capture test coverage for use with coveralls
-
 plugins {
     id 'jacoco'
     id 'com.github.kt3k.coveralls' version '2.6.3'
-}
-
-jacocoTestReport {
-    reports {
-        xml.enabled = true // coveralls plugin depends on xml format report
-        html.enabled = true
-    }
 }
 
 version "1.0.0"
@@ -66,6 +57,13 @@ dependencies {
 
 shadowJar {
     mergeServiceFiles()
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true // coveralls plugin depends on xml format report
+        html.enabled = true
+    }
 }
 
 run.jvmArgs('-noverify', '-XX:TieredStopAtLevel=1')
