@@ -10,7 +10,21 @@ buildscript {
     }
 }
 
-version "0.1"
+// Capture test coverage for use with coveralls
+
+plugins {
+    id 'jacoco'
+    id 'com.github.kt3k.coveralls' version '2.6.3'
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true // coveralls plugin depends on xml format report
+        html.enabled = true
+    }
+}
+
+version "1.0.0"
 group "signal"
 
 apply plugin:"io.spring.dependency-management"
@@ -56,17 +70,3 @@ shadowJar {
 run.jvmArgs('-noverify', '-XX:TieredStopAtLevel=1')
 
 mainClassName = "signal.Application"
-
-// Capture test coverage for use with coveralls
-
-plugins {
-    id 'jacoco'
-    id 'com.github.kt3k.coveralls' version '2.6.3'
-}
-
-jacocoTestReport {
-    reports {
-        xml.enabled = true // coveralls plugin depends on xml format report
-        html.enabled = true
-    }
-}
