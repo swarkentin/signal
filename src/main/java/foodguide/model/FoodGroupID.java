@@ -1,4 +1,4 @@
-package signal.model;
+package foodguide.model;
 
 /**
  * An ID for a food group.

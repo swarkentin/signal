@@ -1,4 +1,4 @@
-package signal.model;
+package foodguide.model;
 
 import java.util.EnumMap;
 import java.util.HashMap;

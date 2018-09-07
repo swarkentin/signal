@@ -1,6 +1,8 @@
-package signal.api;
+package foodguide.api;
 
 import org.junit.Test;
+import foodguide.service.FoodGuide;
+import foodguide.service.JsonBackedFoodGuide;
 
 import java.io.IOException;
 

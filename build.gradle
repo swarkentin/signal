@@ -16,7 +16,7 @@ plugins {
 }
 
 version "1.0.0"
-group "signal"
+group "foodguide"
 
 apply plugin:"io.spring.dependency-management"
 apply plugin:"com.github.johnrengelman.shadow"
@@ -53,6 +53,7 @@ dependencies {
     testCompile "junit:junit:4.12"
     testCompile "io.micronaut:inject-java"
     testCompile "org.assertj:assertj-core:3.11.1"
+    testCompile 'pl.pragmatists:JUnitParams:1.1.1'
 }
 
 shadowJar {
@@ -68,4 +69,4 @@ jacocoTestReport {
 
 run.jvmArgs('-noverify', '-XX:TieredStopAtLevel=1')
 
-mainClassName = "signal.Application"
+mainClassName = "foodguide.Application"

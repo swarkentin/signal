@@ -1,5 +1,5 @@
 profile: service
-defaultPackage: signal
+defaultPackage: foodguide
 ---
 testFramework: junit
 sourceLanguage: java

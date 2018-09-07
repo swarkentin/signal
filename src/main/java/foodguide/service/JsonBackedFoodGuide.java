@@ -1,16 +1,20 @@
-package signal.api;
+package foodguide.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import signal.model.DirectionalStatement;
-import signal.model.DirectionalStatementLookup;
-import signal.model.Food;
-import signal.model.FoodGroup;
-import signal.model.FoodGroupLookup;
-import signal.model.FoodLookup;
-import signal.model.Serving;
+import foodguide.controller.Identification;
+import foodguide.dto.SingleDailyMenu;
+import foodguide.model.DirectionalStatement;
+import foodguide.model.DirectionalStatementLookup;
+import foodguide.model.Food;
+import foodguide.model.FoodGroup;
+import foodguide.model.FoodGroupLookup;
+import foodguide.model.FoodLookup;
+import foodguide.model.Gender;
+import foodguide.model.Serving;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Singleton;
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,6 +40,7 @@ public class JsonBackedFoodGuide implements FoodGuide<JsonBackedFoodGuide> {
     private final Map<Locale, FoodLookup> foodLookup = new HashMap<>();
     private final Map<Locale, List<Serving>> servingLookup = new HashMap<>();
 
+    @PostConstruct
     public JsonBackedFoodGuide read() throws IOException {
         //
         // Read Food Group files for each locale
@@ -73,6 +78,11 @@ public class JsonBackedFoodGuide implements FoodGuide<JsonBackedFoodGuide> {
         }
 
         return this;
+    }
+
+    @Override
+    public SingleDailyMenu createDailyMenu(Identification identification) {
+        return new SingleDailyMenu(identification.name);
     }
 
     private <T> List<T> getListOfElements(InputStream in, TypeReference<List<T>> type) throws IOException {

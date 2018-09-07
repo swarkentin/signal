@@ -1,4 +1,4 @@
-package signal;
+package foodguide;
 
 import io.micronaut.runtime.Micronaut;
 

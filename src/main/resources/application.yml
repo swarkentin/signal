@@ -1,6 +1,10 @@
 micronaut:
     application:
-        name: signal
+        name: foodguide
+
+jackson:
+    serialization:
+        indentOutput: true
                 
 #Uncomment to set server port
 #    server:
