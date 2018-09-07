@@ -1,8 +1,8 @@
 # Canada Food Guide Menu 
 
-[![Build Status](https://travis-ci.org/swarkentin/foodguide.svg?branch=master)](https://travis-ci.org/swarkentin/foodguide)
+[![Build Status](https://travis-ci.org/swarkentin/signal.svg?branch=master)](https://travis-ci.org/swarkentin/signal)
 
-[![Coverage Status](https://coveralls.io/repos/github/swarkentin/foodguide/badge.svg?branch=master)](https://coveralls.io/github/swarkentin/foodguide?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/swarkentin/signal/badge.svg?branch=master)](https://coveralls.io/github/swarkentin/signal?branch=master)
 
 Changes to Source Data
 --------------------------
