@@ -49,6 +49,8 @@ To run the assembled Docker image on port 8080:
 
 ```bash
 $docker run -e JAVA_OPTS='-Dmicronaut.server.port=8080' -p 8080:8080 swarkentin/foodguide
+22:35:29.968 [main] INFO  io.micronaut.runtime.Micronaut - Startup completed in 1845ms. Server Running: http://localhost:8080
+
 ```
 
 API Usage
