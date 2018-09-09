@@ -8,14 +8,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Serving {
     final FoodGroupID foodGroupID;
 
-    final String gender;
+    final Gender gender;
 
     final String ages;
 
     final String servings;
 
     public Serving(final @JsonProperty("fgid") FoodGroupID foodGroupID,
-                   final @JsonProperty("gender") String gender,
+                   final @JsonProperty("gender") Gender gender,
                    final @JsonProperty("ages") String ages,
                    final @JsonProperty("servings") String servings) {
         this.foodGroupID = foodGroupID;

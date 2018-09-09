@@ -6,13 +6,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * A Deserialization of an entry from the <em>foods-[locale].json</em> file.
  */
 public class Food {
-    final FoodGroupID foodGroupID;
+    public final FoodGroupID foodGroupID;
 
-    final int foodGroupCategoryID;
+    public final int foodGroupCategoryID;
 
-    final String servingSize;
+    public final String servingSize;
 
-    final String name;
+    public final String name;
 
     public Food(final @JsonProperty("fgid") FoodGroupID foodGroupID,
                 final @JsonProperty("fgcat_id") int foodGroupCategoryID,

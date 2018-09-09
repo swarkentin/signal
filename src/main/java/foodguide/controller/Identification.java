@@ -26,13 +26,13 @@ public class Identification {
      * $NAME-$GENDER-$AGE
      * </code>
      * <p>
-     * For example, <code>Steve-M-29</code> or <code>April%20ONneal-F-32</code>
+     * For example, <code>Steve:M:29</code> or <code>April%20ONneal:F:32</code>
      *
      * @param idString The raw id string
      * @return The parsed object
      */
     public static Identification parse(@NotBlank String idString) throws BadIdentificationException {
-        final String[] parts = idString.split("-");
+        final String[] parts = idString.split(":");
         if (parts.length == 3) {
             // Parse the name
             final String name = parts[0];
@@ -52,12 +52,16 @@ public class Identification {
             return new Identification(name, gender, age);
         }
 
-        throw new BadIdentificationException("Expected <name>-<Gender>-<age> such as \"Steve-M-25\"");
+        throw new BadIdentificationException("Expected <name>:<Gender>:<age> such as \"Steve:M:25\"");
     }
 
     private static int parseAge(final String ageString) throws BadIdentificationException {
         try {
-            return Integer.parseUnsignedInt(ageString);
+            final int age = Integer.parseUnsignedInt(ageString);
+            if (age < 2) {
+                throw new BadIdentificationException(String.format("Age must be greater than or equal to 0, but was '%s'.", ageString));
+            }
+            return age;
         } catch (NumberFormatException ex) {
             throw new BadIdentificationException(String.format("Cannot read age - %s", ex.getMessage()));
         }

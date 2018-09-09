@@ -8,17 +8,17 @@ import java.util.List;
  * A Deserialization of an entry from the <em>foodgroups-[locale].json</em> file.
  */
 public class FoodGroup {
-    final FoodGroupID foodGroupID;
+    public final FoodGroupID foodGroupID;
 
-    final String goodGroup;
+    public final String description;
 
-    final List<FoodGroupCategory> categories;
+    public final List<FoodGroupCategory> categories;
 
     public FoodGroup(final @JsonProperty("fgid") FoodGroupID foodGroupID,
-                     final @JsonProperty("foodgroup")  String foodGroup,
+                     final @JsonProperty("foodgroup")  String description,
                      final @JsonProperty("categories") List<FoodGroupCategory> categories) {
         this.foodGroupID = foodGroupID;
-        this.goodGroup = foodGroup;
+        this.description = description;
         this.categories = categories;
     }
 }
