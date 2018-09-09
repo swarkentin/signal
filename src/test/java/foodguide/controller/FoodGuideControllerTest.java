@@ -41,7 +41,6 @@ public class FoodGuideControllerTest {
         server.stop();
     }
 
-
     // TODO add localization tests
     @Test
     public void getMyDailyMenu() {
@@ -55,11 +54,11 @@ public class FoodGuideControllerTest {
 
     @Test
     @Parameters({
-            "asdfasdf  , Expected <name>-<Gender>-<age> such as \"Steve-M-25\"",
-            "Steve-, Expected <name>-<Gender>-<age> such as \"Steve-M-25\"",
+            "asdfasdf,   Expected <name>-<Gender>-<age> such as \"Steve-M-25\"",
+            "Steve-,     Expected <name>-<Gender>-<age> such as \"Steve-M-25\"",
             "Steve-R-20, No gender matches R. Expected one of 'M' or 'F'.",
-            "Steve-F-A, Cannot read age - For input string: \"A\"",
-            "Steve-20, Expected <name>-<Gender>-<age> such as \"Steve-M-25\""})
+            "Steve-F-A,  Cannot read age - For input string: \"A\"",
+            "Steve-20,   Expected <name>-<Gender>-<age> such as \"Steve-M-25\""})
     public void getMyDailyMenuBadRequest(final String path, final String expectedBadRequestMessage) {
         thrown.expect(HttpClientResponseException.class);
         thrown.expect(new BaseMatcher<HttpClientResponseException>() {

@@ -1,11 +1,18 @@
 micronaut:
     application:
         name: foodguide
+    metrics:
+        enabled: true
+    # Uncomment to set specific port
+    #server:
+    #    port: 8080
 
+# Indent serialized JSON
 jackson:
     serialization:
         indentOutput: true
-                
-#Uncomment to set server port
-#    server:
-#        port: 8080
+
+# Enable health check endpoint
+endpoints:
+    health:
+        details-visible: ANONYMOUS

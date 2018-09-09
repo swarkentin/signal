@@ -43,6 +43,7 @@ dependencyManagement {
 
 dependencies {
     annotationProcessor "io.micronaut:inject-java"
+    compile "io.micronaut:management"
     compile "io.micronaut:inject"
     compile "io.micronaut:runtime"
     compile "javax.annotation:javax.annotation-api:1.3.2"
