@@ -23,7 +23,7 @@ To build the application and run tests:
 $./gradlew check
 ```
 
-## Build and Run App with Gradle
+## Build and run application with Gradle
 To build and run the service from gradle locally on a random port:
 
 ```bash
@@ -44,7 +44,7 @@ REPOSITORY             TAG                 IMAGE ID            CREATED          
 swarkentin/foodguide   latest              dcc394683e89        1 minutes ago       117MB
 ```
 
-### Run the Dpcler image with a specific port:
+### Run the Docker image with a specific port:
 To run the assembled Docker image on port 8080:
 
 ```bash
