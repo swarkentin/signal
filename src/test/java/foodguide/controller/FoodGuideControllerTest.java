@@ -1,5 +1,6 @@
 package foodguide.controller;
 
+import foodguide.dto.FamilyDailyMenu;
 import foodguide.dto.SingleDailyMenu;
 import io.micronaut.context.ApplicationContext;
 import io.micronaut.http.HttpRequest;
@@ -43,6 +44,11 @@ public class FoodGuideControllerTest {
     public static void tearDown() {
         server.stop();
     }
+
+
+    //
+    // /foodguide/my-daily-menu
+    //
 
     @Test
     public void myDailyMenuLocalizedToFrench() {
@@ -91,7 +97,7 @@ public class FoodGuideControllerTest {
 
     @Test
     @Parameters()
-    public void dailyMenuHasAcceptedServingSizes(final String path, final List<ServingCount> expectedServings) {
+    public void myDailyMenuHasAcceptedServingSizes(final String path, final List<ServingCount> expectedServings) {
         final SingleDailyMenu menu = client.toBlocking()
                 .retrieve(HttpRequest.GET("/foodguide/my-daily-menu/" + path), SingleDailyMenu.class);
 
@@ -102,7 +108,7 @@ public class FoodGuideControllerTest {
     }
 
     @SuppressWarnings("unused")
-    private Object parametersForDailyMenuHasAcceptedServingSizes() {
+    private Object parametersForMyDailyMenuHasAcceptedServingSizes() {
         return new Object[]{
                 new Object[]{"Steve:M:2", asList(vf(4), gr(3), mi(2), me(1))},
                 new Object[]{"Steve:M:3", asList(vf(4), gr(3), mi(2), me(1))},
@@ -121,7 +127,7 @@ public class FoodGuideControllerTest {
 
     @Test
     @Parameters()
-    public void dailyMenuHasTips(final String foodGroup, final List<String> tips) {
+    public void myDailyMenuHasTips(final String foodGroup, final List<String> tips) {
         final SingleDailyMenu menu = client.toBlocking()
                 .retrieve(HttpRequest.GET("/foodguide/my-daily-menu/nobody:M:20"), SingleDailyMenu.class);
 
@@ -129,7 +135,7 @@ public class FoodGuideControllerTest {
     }
 
     @SuppressWarnings("unused")
-    private Object parametersForDailyMenuHasTips() {
+    private Object parametersForMyDailyMenuHasTips() {
         return new Object[]{
                 new Object[]{"Vegetables and Fruit", asList(
                         "Eat at least one dark green and one orange vegetable each day.",
@@ -153,7 +159,7 @@ public class FoodGuideControllerTest {
     }
 
     @Test
-    public void getMyDailyMenuTooYoung() {
+    public void myDailyMenuTooYoung() {
         thrown.expect(HttpClientResponseException.class);
         thrown.expect(responseException(HttpStatus.BAD_REQUEST, "too young"));
 
@@ -170,12 +176,106 @@ public class FoodGuideControllerTest {
             "Steve:F:0,  Age must be greater than or equal to 0\\, but was '0'.",
             "Steve:F:1,  Age must be greater than or equal to 0\\, but was '1'.",
             "Steve:20,   Expected <name>:<Gender><age> such as \"Steve:M:25\""})
-    public void getMyDailyMenuBadRequest(final String path, final String expectedBadRequestMessage) {
+    public void myDailyMenuBadRequest(final String path, final String expectedBadRequestMessage) {
         thrown.expect(HttpClientResponseException.class);
         thrown.expect(responseException(HttpStatus.BAD_REQUEST, expectedBadRequestMessage));
 
         client.toBlocking().retrieve(HttpRequest.GET("/foodguide/my-daily-menu/" + path), HttpResponse.class);
     }
+
+    //
+    // /foodguide/family-daily-menu
+    //
+
+    @Test
+    public void familyDailyMenuLocalizedToFrench() {
+        final FamilyDailyMenu menu = client.toBlocking()
+                .retrieve(HttpRequest.GET("/foodguide/family-daily-menu/Steve:M:20,Jill:F:22")
+                                .header("Accept-Language", "fr,en;q=0.5")
+                        , FamilyDailyMenu.class);
+
+        assertThat(menu.tipsByFoodGroup.get("Produits céréaliers"))
+                .isIn("Choisissez des produits céréaliers plus faibles en lipides, sucre ou sel.",
+                        "Consommez au moins la moitié de vos portions de produits céréaliers sous forme de grains entiers.");
+    }
+
+
+    @Test
+    public void familyDailyMenuLocalizedToEnglish() {
+        final FamilyDailyMenu menu = client.toBlocking()
+                .retrieve(HttpRequest.GET("/foodguide/family-daily-menu/Steve:M:20,Jill:F:22")
+                                .header("Accept-Language", "en-US,en;q=0.5")
+                        , FamilyDailyMenu.class);
+
+        assertThat(menu.tipsByFoodGroup.get("Grains"))
+                .isIn("Make at least half of your grain products whole grain each day.",
+                        "Choose grain products that are lower in fat, sugar or salt.");
+    }
+
+    @Test
+    public void familyDailyMenuLocalizedToUnsupportedLanguage() {
+        thrown.expect(HttpClientResponseException.class);
+        thrown.expect(responseException(HttpStatus.NOT_ACCEPTABLE, "Unsupported language. Supported languages include 'en,fr'."));
+
+        client.toBlocking()
+                .retrieve(HttpRequest.GET("/foodguide/family-daily-menu/Steve:M:20,Jill:F:22")
+                                .header("Accept-Language", "de")
+                        , FamilyDailyMenu.class);
+
+    }
+
+    @Test
+    public void familyDailyMenuNoAcceptLanguageHeader() {
+        final FamilyDailyMenu menu = client.toBlocking()
+                .retrieve(HttpRequest.GET("/foodguide/family-daily-menu/Steve:M:20,Jill:F:22")
+                        , FamilyDailyMenu.class);
+
+        assertThat(menu.tipsByFoodGroup.get("Grains"))
+                .isIn("Make at least half of your grain products whole grain each day.",
+                        "Choose grain products that are lower in fat, sugar or salt.");
+    }
+
+    @Test
+    @Parameters({
+            "asdfasdf,               Expected <name>:<Gender><age> such as \"Steve:M:25\"",
+            "Steve:,                 Expected <name>:<Gender>:<age> such as \"Steve:M:25\"",
+            "Steve:M:20\\,Francene:, Expected <name>:<Gender>:<age> such as \"Steve:M:25\"",
+            "Steve:R:20,             No gender matches R. Expected one of 'M' or 'F'.",
+            "Steve:20,               Expected <name>:<Gender><age> such as \"Steve:M:25\""})
+    public void familyDailyMenuBadRequest(final String path, final String expectedBadRequestMessage) {
+        thrown.expect(HttpClientResponseException.class);
+        thrown.expect(responseException(HttpStatus.BAD_REQUEST, expectedBadRequestMessage));
+
+        client.toBlocking().retrieve(HttpRequest.GET("/foodguide/family-daily-menu/" + path), HttpResponse.class);
+    }
+
+    @Test
+    @Parameters()
+    public void familyDailyMenuHasAcceptedServingSizes(final int numberOfIndividualMenus,
+                                                       final String path,
+                                                       final List<ServingCount> expectedServings) {
+        final FamilyDailyMenu menu = client.toBlocking()
+                .retrieve(HttpRequest.GET("/foodguide/family-daily-menu/" + path), FamilyDailyMenu.class);
+
+        assertThat(menu.menuPerPerson).hasSize(numberOfIndividualMenus);
+        for (final ServingCount expectedServing : expectedServings) {
+            assertThat(menu.foodsByFoodGroup.get(expectedServing.foodGroup).size())
+                    .isBetween(expectedServing.minimumServingCount, expectedServing.maximumServingCount);
+        }
+    }
+
+    @SuppressWarnings("unused")
+    private Object parametersForFamilyDailyMenuHasAcceptedServingSizes() {
+        return new Object[]{
+                new Object[]{1, "Steve:M:4", asList(vf(5), gr(4), mi(2), me(1))},
+                new Object[]{2, "Steve:M:2,Jill:f:60", asList(vf(11), gr(9), mi(5), me(3))},
+                new Object[]{3, "Steve:M:2,Jill:f:60,Bob:M:12", asList(vf(17), gr(15), mi(8, 9), me(4, 5))},
+        };
+    }
+
+    //
+    // test utilities
+    //
 
     private BaseMatcher<HttpClientResponseException> responseException(final HttpStatus expectedStatus, final String expectedMessage) {
         return new BaseMatcher<HttpClientResponseException>() {

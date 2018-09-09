@@ -1,7 +1,7 @@
 package foodguide.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import foodguide.model.Gender;
 
 import java.util.List;
 import java.util.Map;
@@ -9,6 +9,7 @@ import java.util.Map;
 /**
  * The response DTO for the daily menu for one person.
  */
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class SingleDailyMenu {
 
     public final String name;

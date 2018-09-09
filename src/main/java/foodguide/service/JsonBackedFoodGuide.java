@@ -2,6 +2,7 @@ package foodguide.service;
 
 import foodguide.controller.Identification;
 import foodguide.controller.UnsupportedLocaleException;
+import foodguide.dto.FamilyDailyMenu;
 import foodguide.dto.FoodItem;
 import foodguide.dto.SingleDailyMenu;
 import foodguide.model.*;
@@ -105,13 +106,31 @@ public class JsonBackedFoodGuide implements FoodGuide<JsonBackedFoodGuide> {
                 foodsByFoodGroup);
     }
 
+    @Override
+    public FamilyDailyMenu createDailyMenu(final List<Locale.LanguageRange> locale,
+                                           final List<Identification> identifications) throws UnsupportedLocaleException {
+        final List<SingleDailyMenu> individualMenus = new ArrayList<>();
+        final Map<String, String> tipsByFoodGroup = new HashMap<>();
+        for (final Identification identification : identifications) {
+            final SingleDailyMenu menu = createDailyMenu(locale, identification);
+
+            // Tips are omitted for individual menus, copy a value for the family menu, but omit it for individual
+            if (tipsByFoodGroup.isEmpty()) {
+                tipsByFoodGroup.putAll(menu.tipsByFoodGroup);
+            }
+            individualMenus.add(new SingleDailyMenu(menu.name, menu.age, null, menu.foodsByFoodGroup));
+        }
+
+        return new FamilyDailyMenu(tipsByFoodGroup, individualMenus);
+    }
+
     private Locale getLocaleForLanguageRanges(final List<Locale.LanguageRange> languageRanges) throws UnsupportedLocaleException {
-        if(languageRanges.size() == 0){
+        if (languageRanges.size() == 0) {
             return Locale.ENGLISH;
         }
 
         final List<Locale> matching = Locale.filter(languageRanges, Arrays.asList(this.locales));
-        if(matching.size() > 0){
+        if (matching.size() > 0) {
             return matching.get(0);
         }
 
