@@ -13,16 +13,42 @@ Some changes were made to the source data to handle data inconsistencies
 * Made all genders English so they can map to enum without a custom dserialier
 * Converted *-fr.json to UTF-8 encoding
 
-Running
+Building and Running
 -------------
 
-To run the service from gradle:
+## Build and run tests
+To build the application and run tests:
+
+```bash
+$./gradlew check
+```
+
+## Build and Run App with Gradle
+To build and run the service from gradle locally on a random port:
 
 ```bash
 $./gradlew run
 
 > Task :run
 INFO  io.micronaut.runtime.Micronaut - Startup completed in 2790ms. Server Running: http://localhost:11029
+```
+
+## Build a Docker image:
+To build the service and assemble the Docker image:
+
+```bash
+$./gradlew --no-daemon assemble && docker build -t swarkentin/foodguide .
+
+$docker images
+REPOSITORY             TAG                 IMAGE ID            CREATED             SIZE
+swarkentin/foodguide   latest              dcc394683e89        1 minutes ago       117MB
+```
+
+### Run the Dpcler image with a specific port:
+To run the assembled Docker image on port 8080:
+
+```bash
+$docker run -e JAVA_OPTS='-Dmicronaut.server.port=8080' -p 8080:8080 swarkentin/foodguide
 ```
 
 API Usage
@@ -126,14 +152,3 @@ Accept: application/json
       "food" : "Fortified soy beverage (unsweetened)"
     },...
 ```
-
-Building
--------------
-
-To build the service:
-
-```bash
-$./gradlew build
-```
-
-
