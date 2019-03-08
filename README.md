@@ -13,6 +13,8 @@ Some changes were made to the source data to handle data inconsistencies
 * Made all genders English so they can map to enum without a custom dserialier
 * Converted *-fr.json to UTF-8 encoding
 
+Let's try this
+
 Building and Running
 -------------
 
